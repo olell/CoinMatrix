@@ -11,7 +11,7 @@
 // you can declare variables for your animation here
 static const uint8_t rolling_text_strings_count = 1;
 static const char* rolling_text_strings[] = {
-    "HALLO WELT   ",
+    "OLEL   ",
 };
 static uint8_t rolling_text_string_index = 0;
 static const char* rolling_text_display_string;
