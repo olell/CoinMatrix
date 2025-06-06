@@ -9,10 +9,21 @@ void gfxSetPixelXY(uint8_t x, uint8_t y, uint8_t v) {
     charlieSetPixelRaw(y * CHARLIE_PIN_COUNT + ((x >= y) ? x + 1 : x), v);
 }
 
+uint8_t gfxGetPixelXY(uint8_t x, uint8_t y) {
+    return charlieGetPixelRaw(y * CHARLIE_PIN_COUNT + ((x >= y) ? x + 1 : x));
+}
+
 void gfxSetPixelRGB(uint8_t x, uint8_t y, uint32_t color) {
     gfxSetPixelXY((x * 3), y, ((color >> 16) & 0xff));
     gfxSetPixelXY((x * 3) + 1, y, ((color >> 8) & 0xff));
     gfxSetPixelXY((x * 3) + 2, y, (color & 0xff));
+}
+
+uint32_t gfxGetPixelRGB(uint8_t x, uint8_t y) {
+    const uint8_t r = gfxGetPixelXY((x * 3), y);
+    const uint8_t g = gfxGetPixelXY((x * 3) + 1, y);
+    const uint8_t b = gfxGetPixelXY((x * 3) + 2, y);
+    return ((uint8_t)r << 16) | ((uint8_t)g << 8) | (uint8_t)b;
 }
 
 void gfxSetPixelMappedRGB(uint8_t x, uint8_t y, uint32_t color) {
@@ -31,6 +42,32 @@ void gfxSetPixelMappedRGB(uint8_t x, uint8_t y, uint32_t color) {
     if (cl > 12 || rw > 15) return;
 
     gfxSetPixelRGB(cl, rw, color);
+}
+
+uint32_t gfxGetPixelMappedRGB(uint8_t x, uint8_t y) {
+    // corner leds don't exist
+    if ((x == 0 || x == 7) && (y == 0 || y == 7)) return 0;
+
+    // right matrix side is actually below left side
+    uint8_t rw = y;
+    uint8_t cl = x;
+    if (cl > 3) {
+        cl -= 4;
+        rw += 8;
+    }
+
+    // check out of bounds
+    if (cl > 12 || rw > 15) return 0;
+
+    return gfxGetPixelRGB(cl, rw);
+}
+
+void gfxClear() {
+    for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
+        for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
+            gfxSetPixelMappedRGB(x, y, 0);
+        }
+    }
 }
 
 /**

@@ -2,10 +2,13 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "animation.h"
 #include "animations/cycle.h"
+#include "animations/firework.h"
+#include "animations/matrix.h"
+#include "animations/pac.h"
+#include "animations/rolling_text.h"
 #include "ch32fun.h"
 #include "charlie.h"
 #include "systick.h"
@@ -32,10 +35,15 @@ int main() {
     systickInit();
 
     // register animations here
+    register_animation(&pac_animation);
+    register_animation(&rolling_text_animation);
+    register_animation(&firework_animation);
+    register_animation(&matrix_animation);
     register_animation(&cycle_animation);
 
     current_animation_idx = 0;
     current_animation = animations[current_animation_idx];
+    current_animation->init();
 
     charlieSetup();
 
@@ -44,11 +52,12 @@ int main() {
     for (;;) {
         current_animation->tick();
         Delay_Ms(current_animation->tick_interval);
-
-        if (millis() - anim_start_time > 5000) {
+        if (millis() - anim_start_time > 10000) {
             anim_start_time = millis();
-            if (++current_animation_idx == animation_count)
+            if (++current_animation_idx >= animation_count)
                 current_animation_idx = 0;
+            current_animation = animations[current_animation_idx];
+            current_animation->init();
         }
     }
 }

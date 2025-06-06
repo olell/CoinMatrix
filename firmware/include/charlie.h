@@ -23,4 +23,5 @@
 void charlieSetup();
 void charlieDisplay();
 void charlieSetPixelRaw(int px, uint8_t v);
+uint8_t charlieGetPixelRaw(int px);
 #endif

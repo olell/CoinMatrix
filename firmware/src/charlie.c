@@ -60,6 +60,10 @@ void charlieSetPixelRaw(int px, uint8_t v) {
     raw_pixels[px] = v;
 }
 
+uint8_t charlieGetPixelRaw(int px) {
+    return raw_pixels[px];
+}
+
 void charlieSetup() {
     // zero all cfg registers for used pins
     for (uint8_t i = 0; i < CHARLIE_PIN_COUNT; i++) {
@@ -90,7 +94,7 @@ void charlieSetup() {
             conf_reg_clean[i] = GPIOD_CFG;
             out_registers[i] = &GPIOD_OUT;
         }
-        conf_precalc[i] = (uint32_t)2 << (4 * (pin & 0x1f));
+        conf_precalc[i] = (uint32_t)3 << (4 * (pin & 0x1f));
         out_precalc[i] = 1 << (pin & 0x1f);
     }
 }
