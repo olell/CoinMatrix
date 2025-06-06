@@ -3,7 +3,8 @@
 
 #include "animation.h"  // for animation_t
 #include "charlie.h"    // for matrix function
-#include "systick.h"    // for millis()
+#include "gfx.h"
+#include "systick.h"  // for millis()
 
 // you can declare variables for your animation here
 static uint8_t pulse_v, pulse_d;
@@ -24,7 +25,7 @@ static void pulse_tick() {
 
     for (uint8_t y = 0; y < MATRIX_HEIGHT; y++) {
         for (uint8_t x = 0; x < MATRIX_WIDTH; x++) {
-            charlieSetPixelMappedRGB(x, y, pulse_v, pulse_v, pulse_v);
+            gfxSetPixelMappedRGB(x, y, fromRGB(pulse_v, pulse_v, pulse_v));
         }
     }
 }

@@ -4,7 +4,8 @@
 
 #include <stdint.h>
 
-#define CHARLIE_MAX_BRIGHTNESS 16
+#define CHARLIE_PWM_BITS 4
+#define CHARLIE_MAX_BRIGHTNESS 16  // must be 2^CHARLIE_PWM_BITS
 #define CHARLIE_PIN_COUNT 16
 
 // display size
@@ -22,7 +23,4 @@
 void charlieSetup();
 void charlieDisplay();
 void charlieSetPixelRaw(int px, uint8_t v);
-void charlieSetPixelXY(uint8_t x, uint8_t y, uint8_t v);
-void charlieSetPixelRGB(uint8_t x, uint8_t y, uint32_t color);
-void charlieSetPixelMappedRGB(uint8_t x, uint8_t y, uint32_t color);
 #endif

@@ -43,7 +43,7 @@ const uint8_t charlie_pins[16] = {
 #define GPIOD_CFG GPIOD->CFGLR
 #define GPIOD_OUT GPIOD->OUTDR
 
-uint_fast32_t raw_pixels[CHARLIE_PIN_COUNT * CHARLIE_PIN_COUNT];
+uint8_t raw_pixels[CHARLIE_PIN_COUNT * CHARLIE_PIN_COUNT];
 
 volatile uint32_t* conf_reg[CHARLIE_PIN_COUNT];
 uint32_t conf_reg_clean[CHARLIE_PIN_COUNT];
@@ -55,35 +55,6 @@ uint_fast32_t out_precalc[CHARLIE_PIN_COUNT];
 uint_fast32_t row;
 uint_fast32_t col;
 uint_fast32_t pwm;
-
-void charlieSetPixelXY(uint8_t x, uint8_t y, uint8_t v) {
-    uint8_t c = (x >= y) ? x + 1 : x;
-    raw_pixels[y * CHARLIE_PIN_COUNT + c] = v;
-}
-
-void charlieSetPixelRGB(uint8_t x, uint8_t y, uint32_t color) {
-    charlieSetPixelXY((x * 3), y, ((color >> 16) & 0xff));
-    charlieSetPixelXY((x * 3) + 1, y, ((color >> 8) & 0xff));
-    charlieSetPixelXY((x * 3) + 2, y, (color & 0xff));
-}
-
-void charlieSetPixelMappedRGB(uint8_t x, uint8_t y, uint32_t color) {
-    // corner leds don't exist
-    if ((x == 0 || x == 7) && (y == 0 || y == 7)) return;
-
-    // right matrix side is actually below left side
-    uint8_t rw = y;
-    uint8_t cl = x;
-    if (cl > 3) {
-        cl -= 4;
-        rw += 8;
-    }
-
-    // check out of bounds
-    if (cl > 12 || rw > 15) return;
-
-    charlieSetPixelRGB(cl, rw, color);
-}
 
 void charlieSetPixelRaw(int px, uint8_t v) {
     raw_pixels[px] = v;
