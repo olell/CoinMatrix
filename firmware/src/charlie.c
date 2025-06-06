@@ -68,15 +68,19 @@ void charlieSetPixelRGB(uint8_t x, uint8_t y, uint32_t color) {
 }
 
 void charlieSetPixelMappedRGB(uint8_t x, uint8_t y, uint32_t color) {
+    // corner leds don't exist
     if ((x == 0 || x == 7) && (y == 0 || y == 7)) return;
-    if (x > 7 || y > 7) return;
 
+    // right matrix side is actually below left side
     uint8_t rw = y;
     uint8_t cl = x;
     if (cl > 3) {
         cl -= 4;
         rw += 8;
     }
+
+    // check out of bounds
+    if (cl > 12 || rw > 15) return;
 
     charlieSetPixelRGB(cl, rw, color);
 }
