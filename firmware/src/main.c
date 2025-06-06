@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include "animation.h"
-#include "animations/pulse.h"
+#include "animations/cycle.h"
 #include "ch32fun.h"
 #include "charlie.h"
 #include "systick.h"
@@ -32,7 +32,7 @@ int main() {
     systickInit();
 
     // register animations here
-    register_animation(&pulse_animation);
+    register_animation(&cycle_animation);
 
     current_animation_idx = 0;
     current_animation = animations[current_animation_idx];
