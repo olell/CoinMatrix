@@ -15,6 +15,27 @@
 #include "ch32fun.h"
 #include "stdio.h"
 
+// matrix pinout
+// coin matrix
+const uint8_t charlie_pins[16] = {
+    CHARLIE_PORT_D | 6,  // P2 L0
+    CHARLIE_PORT_D | 5,  // P2 L1
+    CHARLIE_PORT_D | 4,  // P2 L2
+    CHARLIE_PORT_D | 3,  // P2 L3
+    CHARLIE_PORT_D | 2,  // P2 L4
+    CHARLIE_PORT_C | 7,  // P4 L5
+    CHARLIE_PORT_C | 6,  // P4 L6
+    CHARLIE_PORT_C | 5,  // P4 L7
+    CHARLIE_PORT_C | 2,  // P4 L8
+    CHARLIE_PORT_C | 0,  // P4 L9
+    CHARLIE_PORT_C | 1,  // P4 L10
+    CHARLIE_PORT_C | 3,  // P4 L11
+    CHARLIE_PORT_A | 2,  // P8 L12
+    CHARLIE_PORT_A | 1,  // P8 L13
+    CHARLIE_PORT_D | 7,  // P2 L14
+    CHARLIE_PORT_D | 0,  // P2 L15
+};
+
 #define GPIOA_CFG GPIOA->CFGLR
 #define GPIOA_OUT GPIOA->OUTDR
 #define GPIOC_CFG GPIOC->CFGLR
@@ -64,7 +85,7 @@ void charlieSetPixelRaw(int px, uint8_t v) {
     raw_pixels[px] = v;
 }
 
-void charlieSetup(const uint8_t* charlie_pins) {
+void charlieSetup() {
     // zero all cfg registers for used pins
     for (uint8_t i = 0; i < CHARLIE_PIN_COUNT; i++) {
         uint8_t pin = charlie_pins[i];

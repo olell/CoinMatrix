@@ -19,7 +19,7 @@
 #define CHARLIE_PORT_C (1 << 6)
 #define CHARLIE_PORT_D (1 << 5)
 
-void charlieSetup(const uint8_t* charlie_pins);
+void charlieSetup();
 void charlieDisplay();
 void charlieSetPixelRaw(int px, uint8_t v);
 void charlieSetPixelXY(uint8_t x, uint8_t y, uint8_t v);
