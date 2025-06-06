@@ -127,10 +127,10 @@ inline void charlieDisplay() {
 
 #ifdef CHARLIE_COL_IS_ANODE
     const register uint32_t out_val asm("a1") = out_precalc[col];
-    register uint32_t* out_reg asm("a2") = out_registers[col];
+    volatile register uint32_t* out_reg asm("a2") = out_registers[col];
 #else
     const register uint32_t out_val asm("a1") = out_precalc[row];
-    register uint32_t* out_reg asm("a2") = out_registers[row];
+    volatile register uint32_t* out_reg asm("a2") = out_registers[row];
 #endif
 
     const register uint32_t pix_val asm("a3") = raw_pixels[row * CHARLIE_WIDTH + col];
