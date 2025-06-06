@@ -23,7 +23,6 @@ void charlieSetup();
 void charlieDisplay();
 void charlieSetPixelRaw(int px, uint8_t v);
 void charlieSetPixelXY(uint8_t x, uint8_t y, uint8_t v);
-void charlieSetPixelRGB(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b);
-void charlieSetPixelMappedRGB(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b);
-
+void charlieSetPixelRGB(uint8_t x, uint8_t y, uint32_t color);
+void charlieSetPixelMappedRGB(uint8_t x, uint8_t y, uint32_t color);
 #endif

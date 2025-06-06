@@ -61,13 +61,13 @@ void charlieSetPixelXY(uint8_t x, uint8_t y, uint8_t v) {
     raw_pixels[y * CHARLIE_PIN_COUNT + c] = v;
 }
 
-void charlieSetPixelRGB(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b) {
-    charlieSetPixelXY((x * 3), y, r);
-    charlieSetPixelXY((x * 3) + 1, y, g);
-    charlieSetPixelXY((x * 3) + 2, y, b);
+void charlieSetPixelRGB(uint8_t x, uint8_t y, uint32_t color) {
+    charlieSetPixelXY((x * 3), y, ((color >> 16) & 0xff));
+    charlieSetPixelXY((x * 3) + 1, y, ((color >> 8) & 0xff));
+    charlieSetPixelXY((x * 3) + 2, y, (color & 0xff));
 }
 
-void charlieSetPixelMappedRGB(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b) {
+void charlieSetPixelMappedRGB(uint8_t x, uint8_t y, uint32_t color) {
     if ((x == 0 || x == 7) && (y == 0 || y == 7)) return;
     if (x > 7 || y > 7) return;
 
@@ -78,7 +78,7 @@ void charlieSetPixelMappedRGB(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_
         rw += 8;
     }
 
-    charlieSetPixelRGB(cl, rw, r, g, b);
+    charlieSetPixelRGB(cl, rw, color);
 }
 
 void charlieSetPixelRaw(int px, uint8_t v) {
