@@ -4,8 +4,8 @@ TARGET:=src/main
 CH32FUN:=./ch32fun/ch32fun
 TARGET_MCU:=CH32V003
 
-ADDITIONAL_C_FILES+=src/charlie.c # src/animation.c src/systick.c src/touch.c
-EXTRA_CFLAGS:=-I./include
+ADDITIONAL_C_FILES+=src/charlie.c src/systick.c
+EXTRA_CFLAGS:=-I./include 
 
 include $(CH32FUN)/ch32fun.mk
 

@@ -7,6 +7,11 @@
 #define CHARLIE_MAX_BRIGHTNESS 16
 #define CHARLIE_PIN_COUNT 16
 
+// display size
+#define MATRIX_WIDTH 8
+#define MATRIX_HEIGHT 8
+
+// physical matrix size
 #define CHARLIE_WIDTH 16
 #define CHARLIE_HEIGHT 16
 

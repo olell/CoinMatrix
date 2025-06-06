@@ -22,20 +22,18 @@
 #define GPIOD_CFG GPIOD->CFGLR
 #define GPIOD_OUT GPIOD->OUTDR
 
-uint8_t raw_pixels[CHARLIE_PIN_COUNT * CHARLIE_PIN_COUNT];
+uint_fast32_t raw_pixels[CHARLIE_PIN_COUNT * CHARLIE_PIN_COUNT];
 
 volatile uint32_t* conf_reg[CHARLIE_PIN_COUNT];
 uint32_t conf_reg_clean[CHARLIE_PIN_COUNT];
 volatile uint32_t* out_registers[CHARLIE_PIN_COUNT];
 
-uint32_t conf_precalc[CHARLIE_PIN_COUNT];
-uint32_t out_precalc[CHARLIE_PIN_COUNT];
+uint_fast32_t conf_precalc[CHARLIE_PIN_COUNT];
+uint_fast32_t out_precalc[CHARLIE_PIN_COUNT];
 
-const uint8_t* debug_pins;
-
-uint8_t row;
-uint8_t col;
-uint8_t pwm;
+uint_fast32_t row;
+uint_fast32_t col;
+uint_fast32_t pwm;
 
 void charlieSetPixelXY(uint8_t x, uint8_t y, uint8_t v) {
     uint8_t c = (x >= y) ? x + 1 : x;
@@ -67,8 +65,6 @@ void charlieSetPixelRaw(int px, uint8_t v) {
 }
 
 void charlieSetup(const uint8_t* charlie_pins) {
-    debug_pins = charlie_pins;
-
     // zero all cfg registers for used pins
     for (uint8_t i = 0; i < CHARLIE_PIN_COUNT; i++) {
         uint8_t pin = charlie_pins[i];
@@ -109,14 +105,14 @@ inline void charlieDisplay() {
     *(conf_reg[col]) |= conf_precalc[col];
 
 #ifdef CHARLIE_COL_IS_ANODE
-    const uint8_t out_val = out_precalc[col];
-    volatile uint32_t* out_reg = out_registers[col];
+    const register uint32_t out_val asm("a1") = out_precalc[col];
+    register uint32_t* out_reg asm("a2") = out_registers[col];
 #else
-    const uint32_t out_val = out_precalc[row];
-    volatile uint32_t* out_reg = out_registers[row];
+    const register uint32_t out_val asm("a1") = out_precalc[row];
+    register uint32_t* out_reg asm("a2") = out_registers[row];
 #endif
 
-    const uint8_t pix_val = raw_pixels[row * CHARLIE_WIDTH + col];
+    const register uint32_t pix_val asm("a3") = raw_pixels[row * CHARLIE_WIDTH + col];
 
     for (pwm = 0; pwm <= CHARLIE_MAX_BRIGHTNESS; pwm++) {
         *(out_reg) = (pwm < pix_val) ? out_val : 0;
@@ -127,7 +123,9 @@ inline void charlieDisplay() {
 
     // increase row/column, skip row=column
     col++;
-    if (col == row) col++;
+    if (col == row) {
+        col++;
+    }
     if (col >= CHARLIE_WIDTH) {
         col = 0;
         if (++row == CHARLIE_HEIGHT) row = 0;
