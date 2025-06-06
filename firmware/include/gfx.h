@@ -51,4 +51,42 @@ uint32_t fromRGB(uint8_t r, uint8_t g, uint8_t b) {
     return (((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b);
 }
 
+/**
+ * @brief returns a 32-bit color value from HSV values
+ * @param h 0-255
+ * @param s 0-255
+ * @param v 0-255
+ *
+ * based on https://github.com/judge2005/arduinoHSV/
+ */
+uint32_t fromHSV(uint8_t h, uint8_t s, uint8_t v) {
+    // this is the algorithm to convert from RGB to HSV
+    h = (h * 192) / 256;       // 0..191
+    uint8_t i = h / 32;        // We want a value of 0 thru 5
+    uint8_t f = (h % 32) * 8;  // 'fractional' part of 'i' 0..248 in jumps
+
+    uint8_t sInv = 255 - s;       // 0 -> 0xff, 0xff -> 0
+    uint8_t fInv = 255 - f;       // 0 -> 0xff, 0xff -> 0
+    uint8_t pv = v * sInv / 256;  // pv will be in range 0 - 255
+    uint8_t qv = v * (256 - s * f / 256) / 256;
+    uint8_t tv = v * (256 - s * fInv / 256) / 256;
+
+    switch (i) {
+        case 0:
+            return fromRGB8(v, tv, pv);
+        case 1:
+            return fromRGB8(qv, v, pv);
+        case 2:
+            return fromRGB8(pv, v, tv);
+        case 3:
+            return fromRGB8(pv, qv, v);
+        case 4:
+            return fromRGB8(tv, pv, v);
+        case 5:
+            return fromRGB8(v, pv, qv);
+        default:
+            return 0;
+    }
+}
+
 #endif  // _GFX_H
