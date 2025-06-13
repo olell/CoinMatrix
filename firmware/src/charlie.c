@@ -30,8 +30,10 @@ const uint8_t charlie_pins[16] = {
     CHARLIE_PORT_C | 0,  // P4 L9
     CHARLIE_PORT_C | 1,  // P4 L10
     CHARLIE_PORT_C | 3,  // P4 L11
-    CHARLIE_PORT_A | 2,  // P8 L12
-    CHARLIE_PORT_A | 1,  // P8 L13
+    //CHARLIE_PORT_A | 2,  // P8 L12
+    //CHARLIE_PORT_A | 1,  // P8 L13
+    CHARLIE_PORT_D | 1,
+    CHARLIE_PORT_C | 4,
     CHARLIE_PORT_D | 7,  // P2 L14
     CHARLIE_PORT_D | 0,  // P2 L15
 };
@@ -65,12 +67,14 @@ uint8_t charlieGetPixelRaw(int px) {
 }
 
 void charlieSetup() {
+    // Convert PD1 from SWIO to GPIO
+    AFIO->PCFR1 &= ~(AFIO_PCFR1_SWCFG);
+    AFIO->PCFR1 |= AFIO_PCFR1_SWCFG_DISABLE;
+
     // zero all cfg registers for used pins
     for (uint8_t i = 0; i < CHARLIE_PIN_COUNT; i++) {
         uint8_t pin = charlie_pins[i];
-        if ((pin & 0xe0) == CHARLIE_PORT_A) {
-            GPIOA_CFG &= ~((uint32_t)0xf << (4 * (pin & 0x1f)));
-        } else if ((pin & 0xe0) == CHARLIE_PORT_C) {
+        if ((pin & 0xe0) == CHARLIE_PORT_C) {
             GPIOC_CFG &= ~((uint32_t)0xf << (4 * (pin & 0x1f)));
         } else if ((pin & 0xe0) == CHARLIE_PORT_D) {
             GPIOD_CFG &= ~((uint32_t)0xf << (4 * (pin & 0x1f)));
@@ -81,11 +85,7 @@ void charlieSetup() {
     col = 1;
     for (uint8_t i = 0; i < CHARLIE_PIN_COUNT; i++) {
         uint8_t pin = charlie_pins[i];
-        if ((pin & 0xe0) == CHARLIE_PORT_A) {
-            conf_reg[i] = &GPIOA_CFG;
-            conf_reg_clean[i] = GPIOA_CFG;
-            out_registers[i] = &GPIOA_OUT;
-        } else if ((pin & 0xe0) == CHARLIE_PORT_C) {
+        if ((pin & 0xe0) == CHARLIE_PORT_C) {
             conf_reg[i] = &GPIOC_CFG;
             conf_reg_clean[i] = GPIOC_CFG;
             out_registers[i] = &GPIOC_OUT;

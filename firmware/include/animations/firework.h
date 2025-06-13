@@ -115,7 +115,7 @@ static void firework_tick() {
 static const animation_t firework_animation = {
     .init = firework_init,
     .tick = firework_tick,
-    .tick_interval = 50,  // ms
+    .tick_interval = 16,  // ms
 };
 
 #endif
