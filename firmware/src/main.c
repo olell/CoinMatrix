@@ -2,19 +2,15 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include "ch32fun.h"
-#include "usb_config.h"
-#include "rv003usb.h"
 
 #include "animation.h"
 #include "animations/animationPlayer.h"
-#include "animations/cycle.h"
-#include "animations/firework.h"
-#include "animations/matrix.h"
-#include "animations/pac.h"
-#include "animations/rolling_text.h"
+#include "animations/ledvm.h"
+#include "ch32fun.h"
 #include "charlie.h"
+#include "rv003usb.h"
 #include "systick.h"
+#include "usb_config.h"
 
 static const animation_t* animations[MAX_ANIMATIONS];
 static size_t animation_count = 0;
@@ -39,14 +35,14 @@ int main() {
 
     RCC->APB2PCENR |= RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_AFIO | RCC_AFIOEN;
 
-
     // register animations here
-    register_animation(&cycle_animation);
-    register_animation(&pac_animation);
-    register_animation(&animation_player);
-    register_animation(&rolling_text_animation);
-    register_animation(&firework_animation);
-    register_animation(&matrix_animation);
+    register_animation(&ledvm_animation);
+    // register_animation(&cycle_animation);
+    // register_animation(&pac_animation);
+    // register_animation(&animation_player);
+    // register_animation(&rolling_text_animation);
+    // register_animation(&firework_animation);
+    // register_animation(&matrix_animation);
 
     current_animation_idx = 0;
     current_animation = animations[current_animation_idx];
@@ -54,17 +50,17 @@ int main() {
 
     charlieSetup();
 
-    uint32_t anim_start_time = millis();
+    // uint32_t anim_start_time = millis();
 
     for (;;) {
         current_animation->tick();
         Delay_Ms(current_animation->tick_interval);
-        if (millis() - anim_start_time > 10000) {
-            anim_start_time = millis();
-            if (++current_animation_idx >= animation_count)
-                current_animation_idx = 0;
-            current_animation = animations[current_animation_idx];
-            current_animation->init();
-        }
+        // if (millis() - anim_start_time > 2000) {
+        //     anim_start_time = millis();
+        //     if (++current_animation_idx >= animation_count)
+        //         current_animation_idx = 0;
+        //     current_animation = animations[current_animation_idx];
+        //     current_animation->init();
+        // }
     }
 }

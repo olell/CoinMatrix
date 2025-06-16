@@ -13,7 +13,7 @@
 #define MATRIX_HEIGHT 8
 
 // physical matrix size
-#define CHARLIE_WIDTH 16
+#define CHARLIE_WIDTH 12
 #define CHARLIE_HEIGHT 16
 
 #define CHARLIE_PORT_A (1 << 7)

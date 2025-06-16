@@ -6,11 +6,11 @@
 #include "charlie.h"
 
 void gfxSetPixelXY(uint8_t x, uint8_t y, uint8_t v) {
-    charlieSetPixelRaw(y * CHARLIE_PIN_COUNT + ((x >= y) ? x + 1 : x), v);
+    charlieSetPixelRaw(y * CHARLIE_WIDTH + x, v);
 }
 
 uint8_t gfxGetPixelXY(uint8_t x, uint8_t y) {
-    return charlieGetPixelRaw(y * CHARLIE_PIN_COUNT + ((x >= y) ? x + 1 : x));
+    return charlieGetPixelRaw(y * CHARLIE_WIDTH + x);
 }
 
 void gfxSetPixelRGB(uint8_t x, uint8_t y, uint32_t color) {
@@ -39,7 +39,7 @@ void gfxSetPixelMappedRGB(uint8_t x, uint8_t y, uint32_t color) {
     }
 
     // check out of bounds
-    if (cl > 12 || rw > 15) return;
+    if (cl >= CHARLIE_WIDTH || rw >= CHARLIE_HEIGHT) return;
 
     gfxSetPixelRGB(cl, rw, color);
 }
@@ -57,7 +57,7 @@ uint32_t gfxGetPixelMappedRGB(uint8_t x, uint8_t y) {
     }
 
     // check out of bounds
-    if (cl > 12 || rw > 15) return 0;
+    if (cl >= CHARLIE_WIDTH || rw >= CHARLIE_HEIGHT) return 0;
 
     return gfxGetPixelRGB(cl, rw);
 }
