@@ -2,8 +2,7 @@
 #define _ANIM_DROPLETS_H
 
 #include "animation.h"  // for animation_t
-#include "ch32fun.h"
-#include "charlie.h"  // for matrix function
+#include "charlie.h"    // for matrix function
 #include "gfx.h"
 #include "systick.h"  // for millis()
 
@@ -13,6 +12,7 @@
 // you can declare variables for your animation here
 #define CONCURRENT_DROPS 4
 #define DROPLIFE 1200
+
 
 int droptime[CONCURRENT_DROPS];
 int droplife[CONCURRENT_DROPS];
@@ -45,10 +45,13 @@ uint8_t fc;
 static void droplets_tick() {
     // draw something to matrix
 
+    
+
     int y, x, i;
     int d;
     uint8_t framebuffer[MATRIX_WIDTH * MATRIX_HEIGHT] = {0};
     uint8_t colbuffer[MATRIX_WIDTH * MATRIX_HEIGHT] = {0};
+    
 
     for (d = 0; d < CONCURRENT_DROPS; d++) {
         i = 0;
@@ -56,11 +59,11 @@ static void droplets_tick() {
             for (x = 0; x < MATRIX_WIDTH; x++) {
                 int dx = x - dropx[d];
                 int dy = y - dropy[d];
-                int apd = ((apsqrt(dx * dx * MAX_INTENSITY * 64 + dy * dy * MAX_INTENSITY * 64) - droptime[d] * (MAX_INTENSITY / 16))) + MAX_INTENSITY;
+                int apd = ((apsqrt(dx * dx * MAX_INTENSITY * 48 + dy * dy * MAX_INTENSITY * 48) - droptime[d] * (MAX_INTENSITY / 16))) + MAX_INTENSITY;
                 if (apd < 0) apd = -apd;
                 int inten = (MAX_INTENSITY - apd - 1);
                 if (inten < 0) inten = 0;
-                colbuffer[i] = inten > 0 ? (colbuffer[i] / 2) + (d / 2) : colbuffer[i];
+                colbuffer[i] = inten > 0 ? (colbuffer[i] / 2) + (d/2) : colbuffer[i];
                 inten += framebuffer[i];
                 if (inten >= MAX_INTENSITY) inten = MAX_INTENSITY - 1;
                 framebuffer[i] = inten;
@@ -79,10 +82,10 @@ static void droplets_tick() {
     }
 
     for (x = 0; x < MATRIX_WIDTH; x++)
-        for (y = 0; y < MATRIX_HEIGHT; y++) {
-            uint8_t h = (colbuffer[y * MATRIX_WIDTH + x] * (256 / CONCURRENT_DROPS)) + fc;
-            gfxSetPixelMappedRGB(x, y, fromHSV(h, 255, framebuffer[y * MATRIX_WIDTH + x]));
-        }
+    for (y = 0; y < MATRIX_HEIGHT; y++) {
+        uint8_t h = 128 + (colbuffer[y * MATRIX_WIDTH + x] * (48 / CONCURRENT_DROPS));
+        gfxSetPixelMappedRGB(x, y, fromHSV(h,255, framebuffer[y * MATRIX_WIDTH + x]));
+    }
 
     fc++;
 }
@@ -90,7 +93,7 @@ static void droplets_tick() {
 static const animation_t droplets_animation = {
     .init = droplets_init,
     .tick = droplets_tick,
-    .tick_interval = 5,
+    .tick_interval = 15,
 };
 
 #endif

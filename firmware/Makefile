@@ -5,7 +5,9 @@ CH32FUN:=./ch32fun/ch32fun
 TARGET_MCU:=CH32V003
 
 ADDITIONAL_C_FILES+=src/charlie.c src/systick.c
-EXTRA_CFLAGS:=-I./include 
+EXTRA_CFLAGS:=-I./include
+
+LDFLAGS+=-Wl,--print-memory-usage
 
 include $(CH32FUN)/ch32fun.mk
 

@@ -1,5 +1,3 @@
-
-
 #include <stdint.h>
 #include <stdio.h>
 
@@ -14,6 +12,8 @@
 #include "ch32fun.h"
 #include "charlie.h"
 #include "systick.h"
+
+#define ANIMATION_CYCLE_INTERVAL 20000 // milliseconds between each animation change
 
 static const animation_t* animations[MAX_ANIMATIONS];
 static size_t animation_count = 0;
@@ -36,14 +36,15 @@ int main() {
     funGpioInitAll();
     systickInit();
 
+    RCC->APB2PCENR |= RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_AFIO | RCC_AFIOEN;
+
     // register animations here
-    register_animation(&droplets_animation);
-    // register_animation(&animation_player);
+    register_animation(&cycle_animation);
     register_animation(&pac_animation);
+    register_animation(&animation_player);
     register_animation(&rolling_text_animation);
     register_animation(&firework_animation);
     register_animation(&matrix_animation);
-    register_animation(&cycle_animation);
 
     current_animation_idx = 0;
     current_animation = animations[current_animation_idx];
@@ -56,7 +57,7 @@ int main() {
     for (;;) {
         current_animation->tick();
         Delay_Ms(current_animation->tick_interval);
-        if (millis() - anim_start_time > 20000) {
+        if (millis() - anim_start_time > ANIMATION_CYCLE_INTERVAL) {
             anim_start_time = millis();
             if (++current_animation_idx >= animation_count)
                 current_animation_idx = 0;

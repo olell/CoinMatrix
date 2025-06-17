@@ -35,7 +35,7 @@ static void cycle_tick() {
 static const animation_t cycle_animation = {
     .init = cycle_init,
     .tick = cycle_tick,
-    .tick_interval = 5,
+    .tick_interval = 15,
 };
 
 #endif
