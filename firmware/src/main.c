@@ -6,6 +6,7 @@
 #include "animation.h"
 #include "animations/animationPlayer.h"
 #include "animations/cycle.h"
+#include "animations/droplets.h"
 #include "animations/firework.h"
 #include "animations/matrix.h"
 #include "animations/pac.h"
@@ -36,7 +37,8 @@ int main() {
     systickInit();
 
     // register animations here
-    register_animation(&animation_player);
+    register_animation(&droplets_animation);
+    // register_animation(&animation_player);
     register_animation(&pac_animation);
     register_animation(&rolling_text_animation);
     register_animation(&firework_animation);
@@ -54,12 +56,12 @@ int main() {
     for (;;) {
         current_animation->tick();
         Delay_Ms(current_animation->tick_interval);
-        // if (millis() - anim_start_time > 10000) {
-        //     anim_start_time = millis();
-        //     if (++current_animation_idx >= animation_count)
-        //         current_animation_idx = 0;
-        //     current_animation = animations[current_animation_idx];
-        //     current_animation->init();
-        // }
+        if (millis() - anim_start_time > 20000) {
+            anim_start_time = millis();
+            if (++current_animation_idx >= animation_count)
+                current_animation_idx = 0;
+            current_animation = animations[current_animation_idx];
+            current_animation->init();
+        }
     }
 }
