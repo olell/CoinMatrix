@@ -1,15 +1,11 @@
-
-
 #include <stdint.h>
 #include <stdio.h>
 
 #include "animation.h"
 #include "animations/animationPlayer.h"
-#include "animations/ledvm.h"
 #include "animations/cycle.h"
 #include "animations/droplets.h"
 #include "animations/firework.h"
-#include "animations/ledvm.h"
 #include "animations/matrix.h"
 #include "animations/pac.h"
 #include "animations/rolling_text.h"
@@ -43,7 +39,6 @@ int main() {
     RCC->APB2PCENR |= RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_AFIO | RCC_AFIOEN;
 
     // register animations here
-    register_animation(&ledvm_animation);
     register_animation(&cycle_animation);
     register_animation(&pac_animation);
     register_animation(&animation_player);
