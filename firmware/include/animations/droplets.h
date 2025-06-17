@@ -5,6 +5,7 @@
 #include "charlie.h"    // for matrix function
 #include "gfx.h"
 #include "systick.h"  // for millis()
+#include "ch32fun.h"
 
 #define RANDOM_STRENGTH 2
 #include "lib_rand.h"
