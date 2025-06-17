@@ -4,8 +4,8 @@ TARGET:=src/main
 CH32FUN:=./ch32fun/ch32fun
 TARGET_MCU:=CH32V003
 
-ADDITIONAL_C_FILES+=../../rv003usb/rv003usb/rv003usb.c ../../rv003usb/rv003usb/rv003usb.S src/charlie.c src/systick.c
-EXTRA_CFLAGS:=-I./include  -I../../rv003usb/rv003usb/ -I../../rv003usb/lib/
+ADDITIONAL_C_FILES+=src/charlie.c src/systick.c
+EXTRA_CFLAGS:=-I./include
 
 LDFLAGS+=-Wl,--print-memory-usage
 
@@ -25,6 +25,3 @@ local:
 	gcc src/main.c src/charlie.c -I include/
 	./a.out
 	rm a.out
-
-terminal_usb:
-	$(MINICHLINK)/minichlink -kT -c 0x1209d003

@@ -8,9 +8,7 @@
 #include "animations/ledvm.h"
 #include "ch32fun.h"
 #include "charlie.h"
-#include "rv003usb.h"
 #include "systick.h"
-#include "usb_config.h"
 
 static const animation_t* animations[MAX_ANIMATIONS];
 static size_t animation_count = 0;
