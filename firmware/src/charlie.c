@@ -46,12 +46,12 @@ inline void charlieDisplay() {
     GPIOC->CFGLR = charlie_gpioc_cfglr[idx];
     GPIOD->CFGLR = charlie_gpiod_cfglr[idx];
 
-    register uint32_t *out_reg asm ("a1") = (uint32_t*)charlie_out_regs[idx];
-    register const uint_fast8_t out_val asm("a2") = charlie_out_vals[idx];
+    volatile uint32_t *out_reg = (uint32_t*)charlie_out_regs[idx];
+    const uint_fast8_t out_val = charlie_out_vals[idx];
 
-    register const uint_fast8_t pwm asm("a3") = raw_pixels[idx];
+    const uint_fast8_t pwm = raw_pixels[idx];
 
-    for (register uint8_t tmp asm ("a4"); tmp < CHARLIE_MAX_BRIGHTNESS; tmp++) {
+    for (uint8_t tmp = 0; tmp < CHARLIE_MAX_BRIGHTNESS; tmp++) {
         *(out_reg) = (tmp < pwm) ? out_val : 0;
     }
 
