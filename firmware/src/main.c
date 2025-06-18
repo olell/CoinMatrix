@@ -39,6 +39,7 @@ int main() {
     RCC->APB2PCENR |= RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_AFIO | RCC_AFIOEN;
 
     // register animations here
+    register_animation(&droplets_animation);
     register_animation(&cycle_animation);
     register_animation(&pac_animation);
     register_animation(&animation_player);
