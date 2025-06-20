@@ -9,6 +9,7 @@
 #include "animations/matrix.h"
 #include "animations/pac.h"
 #include "animations/rolling_text.h"
+#include "animations/gol.h"
 #include "ch32fun.h"
 #include "charlie.h"
 #include "systick.h"
@@ -39,6 +40,7 @@ int main() {
     RCC->APB2PCENR |= RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD | RCC_APB2Periph_AFIO | RCC_AFIOEN;
 
     // register animations here
+    register_animation(&gol_animation);
     register_animation(&droplets_animation);
     register_animation(&cycle_animation);
     register_animation(&pac_animation);
